@@ -82,6 +82,7 @@ exports.listSchool = async (req, res) => {
             const diff_Longitude = in_Radian(lon2 - lon1);
 
             // Now applying the formula
+            
             const a = Math.sin(diff_Latitude / 2) ** 2 +
                 Math.cos(in_Radian(lat1)) * Math.cos(in_Radian(lat2)) * Math.sin(diff_Longitude / 2) ** 2;
 
@@ -98,14 +99,11 @@ exports.listSchool = async (req, res) => {
 
 
             return {
-                headers: ["Name", "Address", "Latitude", "Longitude", "Distance (km)"],
-                rows: schools.map(school => [
-                    school.name,
-                    school.address,
-                    school.latitude,
-                    school.longitude,
-                    distance.toFixed(5)
-                ])
+                name: school.name,
+                address: school.address,
+                latitude: school.latitude,
+                longitude: school.longitude,
+                distance: parseFloat(distance.toFixed(5))
             };
         })
         
@@ -113,12 +111,12 @@ exports.listSchool = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            data: sorted_School
+            headers: ["Name", "Address", "Latitude", "Longitude", "Distance (km)"],
+            rows: sorted_School
         })
     } catch (err) {
         return res.status(500).json({
             error: err.message
         })
     }
-
 }
